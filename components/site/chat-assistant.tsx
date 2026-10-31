@@ -15,17 +15,91 @@ const responses: Record<string, string> = {
 
 type Message = { from: 'bot' | 'you'; text: string }
 
-function MascotEyes({ compact = false }: { compact?: boolean }) {
-  return <span className={`mascot-face${compact ? ' mascot-face-compact' : ''}`} aria-hidden="true">
-    <span className="mascot-eye"><span className="mascot-pupil" /></span>
-    <span className="mascot-eye mascot-eye-second"><span className="mascot-pupil" /></span>
-    <span className="mascot-satellite" />
-  </span>
+function MascotEyes({ compact = false, followCursor = false }: { compact?: boolean; followCursor?: boolean }) {
+  const leftPupilRef = useRef<HTMLSpanElement>(null)
+  const rightPupilRef = useRef<HTMLSpanElement>(null)
+  const leftEyeRef = useRef<HTMLSpanElement>(null)
+  const rightEyeRef = useRef<HTMLSpanElement>(null)
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    if (!followCursor || typeof window === 'undefined') return
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    if (isTouchDevice) return
+
+    let rafId: number | null = null
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (rafId) return
+
+      rafId = requestAnimationFrame(() => {
+        setCursorPos({ x: e.clientX, y: e.clientY })
+        rafId = null
+      })
+    }
+
+    document.addEventListener('mousemove', handleMouseMove, { passive: true })
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [followCursor])
+
+  useEffect(() => {
+    if (!followCursor || !leftPupilRef.current || !rightPupilRef.current || !leftEyeRef.current || !rightEyeRef.current) return
+
+    const leftEyeRect = leftEyeRef.current.getBoundingClientRect()
+    const rightEyeRect = rightEyeRef.current.getBoundingClientRect()
+
+    const calculatePupilPosition = (eyeRect: DOMRect) => {
+      const eyeCenterX = eyeRect.left + eyeRect.width / 2
+      const eyeCenterY = eyeRect.top + eyeRect.height / 2
+
+      const deltaX = cursorPos.x - eyeCenterX
+      const deltaY = cursorPos.y - eyeCenterY
+
+      const angle = Math.atan2(deltaY, deltaX)
+      const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 100)
+
+      const maxMove = 3
+      const normalizedDistance = Math.min(distance / 200, 1)
+
+      const x = Math.cos(angle) * maxMove * normalizedDistance
+      const y = Math.sin(angle) * maxMove * normalizedDistance
+
+      return { x, y }
+    }
+
+    const leftPos = calculatePupilPosition(leftEyeRect)
+    const rightPos = calculatePupilPosition(rightEyeRect)
+
+    leftPupilRef.current.style.transform = `translate(${leftPos.x}px, ${leftPos.y}px)`
+    rightPupilRef.current.style.transform = `translate(${rightPos.x}px, ${rightPos.y}px)`
+  }, [cursorPos, followCursor])
+
+  return (
+    <span className={`mascot-face${compact ? ' mascot-face-compact' : ''}`} aria-hidden="true">
+      <span ref={leftEyeRef} className="mascot-eye">
+        <span ref={leftPupilRef} className="mascot-pupil" style={{ transition: 'transform 0.15s ease-out' }} />
+      </span>
+      <span ref={rightEyeRef} className="mascot-eye mascot-eye-second">
+        <span ref={rightPupilRef} className="mascot-pupil" style={{ transition: 'transform 0.15s ease-out' }} />
+      </span>
+      <span className="mascot-satellite" />
+    </span>
+  )
 }
 
 export function ChatAssistant() {
   const [open, setOpen] = useState(false)
   const [isReacting, setIsReacting] = useState(false)
+  const [showGreeting, setShowGreeting] = useState(true)
+  const [greetingDismissed, setGreetingDismissed] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(true)
   const reactionTimerRef = useRef<number | null>(null)
   const [messages, setMessages] = useState<Message[]>([{ from: 'bot', text: 'Hello, welcome to CJ Invisible Grills. How can we help with your space today?' }])
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -37,11 +111,19 @@ export function ChatAssistant() {
 
   useEffect(() => {
     if (!open) return
+    setShowGreeting(false)
+    setGreetingDismissed(true)
     closeRef.current?.focus()
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') closePanel() }
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [closePanel, open])
+
+  // Hide welcome animation after 3 seconds
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowWelcome(false), 3000)
+    return () => window.clearTimeout(timer)
+  }, [])
 
   function respond(question: string) {
     const answer = responses[question] ?? (services.some((service) => service.title === question) ? `For ${question.toLowerCase()}, the right approach depends on your opening, site surfaces and intended use. Tell us your locality and property type and we can discuss the next step.` : 'For advice specific to your property, contact our team on WhatsApp. We serve enquiries across Bengaluru and Mysuru.')
@@ -55,6 +137,18 @@ export function ChatAssistant() {
     if (reactionTimerRef.current !== null) window.clearTimeout(reactionTimerRef.current)
   }, [])
 
+  const handleLauncherClick = () => {
+    setOpen((value) => !value)
+    if (!open) {
+      setShowGreeting(false)
+      setGreetingDismissed(true)
+    }
+  }
+
+  const dismissGreeting = () => {
+    setShowGreeting(false)
+    setGreetingDismissed(true)
+  }
 
   return (
     <>
@@ -69,8 +163,39 @@ export function ChatAssistant() {
         <div className="chat-path-links"><Link href="/areas" onClick={closePanel}>Check service areas</Link><Link href="/contact" onClick={closePanel}>Prepare an enquiry</Link></div>
         <a className="chat-whatsapp" href="https://wa.me/919035771799?text=Hello%20CJ%20Invisible%20Grills%2C%20I%27d%20like%20to%20discuss%20a%20quote." target="_blank" rel="noopener noreferrer">Continue on WhatsApp <Send size={14} /></a>
       </section>
-      <button id="chat-launcher" className={`chat-launcher${open ? ' is-open' : ''}${isReacting ? ' is-reacting' : ''}`} type="button" aria-label={open ? 'Close CJ chat assistant' : 'Open CJ chat assistant'} aria-expanded={open} aria-controls="cj-chat-panel" onClick={() => setOpen((value) => !value)}>
-        <span className="mascot-shell" aria-hidden="true"><MascotEyes /></span>
+
+      {showGreeting && !greetingDismissed && !open && (
+        <div className="chat-greeting-container">
+          <button
+            className="chat-greeting"
+            onClick={handleLauncherClick}
+            aria-label="Open chat to get help"
+          >
+            Hi! How can I help you today?
+          </button>
+          <button
+            className="chat-greeting-close"
+            onClick={dismissGreeting}
+            aria-label="Dismiss greeting"
+          >
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
+      <button
+        id="chat-launcher"
+        className={`chat-launcher${open ? ' is-open' : ''}${isReacting ? ' is-reacting' : ''}${showWelcome ? ' is-welcoming' : ''}`}
+        type="button"
+        aria-label={open ? 'Close CJ chat assistant' : 'Open CJ chat assistant'}
+        aria-expanded={open}
+        aria-controls="cj-chat-panel"
+        onClick={handleLauncherClick}
+      >
+        <span className="mascot-shell" aria-hidden="true">
+          <MascotEyes followCursor />
+          <span className="mascot-smile" aria-hidden="true" />
+        </span>
         <span className="chat-launcher-tooltip">Ask CJ</span>
       </button>
     </>
