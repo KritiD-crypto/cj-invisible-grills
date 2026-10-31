@@ -20,10 +20,15 @@ export default function HomePage() {
 
     <AnimatedSection className="section section-premium sculptural-bg sculptural-curves">
       <SlideIn>
-        <SectionIntro eyebrow="Explore the possibilities" title="A considered fit for every opening." copy="From a balcony edge to a utility space, start with the need and we’ll help you explore an option that makes sense." href="/services" action="See all services" />
+        <SectionIntro eyebrow="Explore the possibilities" title="A considered fit for every opening." copy="From a balcony edge to a utility space, start with the need and we'll help you explore an option that makes sense." href="/services" action="See all services" />
       </SlideIn>
       <StaggerContainer>
-        <div className="service-grid">{services.map((service, index) => <StaggerItem key={service.slug}><PremiumServiceCard service={service} index={index} /></StaggerItem>)}</div>
+        <div className="service-grid service-grid-all">{services.map((service, index) => <StaggerItem key={service.slug}><PremiumServiceCard service={service} index={index} /></StaggerItem>)}</div>
+        <div className="service-grid service-grid-mobile-only">
+          {services.filter(s => ['invisible-grills', 'safety-nets', 'balcony-nets', 'bird-nets'].includes(s.slug)).map((service, index) => (
+            <StaggerItem key={service.slug}><PremiumServiceCard service={service} index={index} /></StaggerItem>
+          ))}
+        </div>
       </StaggerContainer>
       <div className="service-cta-mobile">
         <Link href="/services" className="button button-primary">Explore All Services <ArrowRight size={16} /></Link>
@@ -33,7 +38,7 @@ export default function HomePage() {
     <AnimatedSection className="section section-tight section-warm-accent pattern-grid sculptural-bg sculptural-blend">
       <div className="editorial-split">
         <SlideIn direction="left">
-          <div className="editorial-copy"><span className="eyebrow">A clearer perspective</span><h2>Protection that doesn’t have to take over the view.</h2><p>Every home has its own proportions, routines and priorities. We begin by understanding yours, then talk through what may work for the opening and the people who use it.</p><Link className="text-link" href="/about">Meet CJ Invisible Grills <ArrowRight size={15} /></Link></div>
+          <div className="editorial-copy"><span className="eyebrow">A clearer perspective</span><h2>Protection that doesn't have to take over the view.</h2><p>Every home has its own proportions, routines and priorities. We begin by understanding yours, then talk through what may work for the opening and the people who use it.</p><Link className="text-link" href="/about">Meet CJ Invisible Grills <ArrowRight size={15} /></Link></div>
         </SlideIn>
         <SlideIn direction="right" delay={0.2}>
           <figure className="editorial-image"><div><Image src="/images/grill-detail.png" alt="Illustrative close view of fine invisible grill cables against a bright balcony opening" fill sizes="(max-width: 760px) 90vw, 50vw" /></div><figcaption>Concept imagery for illustrative purposes · Not a verified customer installation</figcaption></figure>
@@ -56,7 +61,7 @@ export default function HomePage() {
       </SlideIn>
       <StaggerContainer staggerDelay={0.15}>
         <div className="process-grid">
-          <StaggerItem><ProcessStep number="01" title="Consultation" copy="Tell us about your space, location and what you’d like to address. We’ll discuss the right next step." /></StaggerItem>
+          <StaggerItem><ProcessStep number="01" title="Consultation" copy="Tell us about your space, location and what you'd like to address. We'll discuss the right next step." /></StaggerItem>
           <StaggerItem><ProcessStep number="02" title="Installation" copy="Once the scope and approach are understood, we coordinate installation around the site conditions." /></StaggerItem>
           <StaggerItem><ProcessStep number="03" title="Final inspection" copy="We review the completed work with you and share care guidance relevant to the installation." /></StaggerItem>
         </div>

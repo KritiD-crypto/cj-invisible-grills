@@ -1,21 +1,42 @@
 'use client'
 
 import { motion, useReducedMotion } from 'motion/react'
+import { useEffect, useState } from 'react'
+
+// Hook to detect mobile viewport
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 760)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  return isMobile
+}
 
 export function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const prefersReducedMotion = useReducedMotion()
+  const isMobile = useIsMobile()
 
   if (prefersReducedMotion) {
     return <div className={className}>{children}</div>
   }
 
+  // Mobile: simpler settings, desktop: original settings
+  const viewportSettings = isMobile
+    ? { once: true, margin: '0px', amount: 0.05 }
+    : { once: false, margin: '-150px', amount: 0.1 }
+
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0.3, y: 20 }}
+      initial={{ opacity: 0, y: isMobile ? 10 : 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: '-50px', amount: 0.2 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={viewportSettings}
+      transition={{ duration: isMobile ? 0.3 : 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -24,17 +45,22 @@ export function AnimatedSection({ children, className = '', delay = 0 }: { child
 
 export function FadeIn({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const prefersReducedMotion = useReducedMotion()
+  const isMobile = useIsMobile()
 
   if (prefersReducedMotion) {
     return <>{children}</>
   }
 
+  const viewportSettings = isMobile
+    ? { once: true, margin: '0px', amount: 0.05 }
+    : { once: false, margin: '-200px', amount: 0.15 }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false, margin: '-100px', amount: 0.3 }}
-      transition={{ duration: 0.8, delay, ease: 'easeOut' }}
+      viewport={viewportSettings}
+      transition={{ duration: isMobile ? 0.4 : 0.6, delay, ease: 'easeOut' }}
     >
       {children}
     </motion.div>
@@ -43,24 +69,29 @@ export function FadeIn({ children, delay = 0 }: { children: React.ReactNode; del
 
 export function SlideIn({ children, direction = 'up', delay = 0 }: { children: React.ReactNode; direction?: 'up' | 'down' | 'left' | 'right'; delay?: number }) {
   const prefersReducedMotion = useReducedMotion()
+  const isMobile = useIsMobile()
 
   const variants = {
-    up: { y: 25 },
-    down: { y: -25 },
-    left: { x: 25 },
-    right: { x: -25 },
+    up: { y: isMobile ? 12 : 20 },
+    down: { y: isMobile ? -12 : -20 },
+    left: { x: isMobile ? 12 : 20 },
+    right: { x: isMobile ? -12 : -20 },
   }
 
   if (prefersReducedMotion) {
     return <>{children}</>
   }
 
+  const viewportSettings = isMobile
+    ? { once: true, margin: '0px', amount: 0.05 }
+    : { once: false, margin: '-150px', amount: 0.1 }
+
   return (
     <motion.div
-      initial={{ opacity: 0.3, ...variants[direction] }}
+      initial={{ opacity: 0, ...variants[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: false, margin: '-60px', amount: 0.2 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={viewportSettings}
+      transition={{ duration: isMobile ? 0.3 : 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -69,20 +100,25 @@ export function SlideIn({ children, direction = 'up', delay = 0 }: { children: R
 
 export function StaggerContainer({ children, staggerDelay = 0.1 }: { children: React.ReactNode; staggerDelay?: number }) {
   const prefersReducedMotion = useReducedMotion()
+  const isMobile = useIsMobile()
 
   if (prefersReducedMotion) {
     return <>{children}</>
   }
 
+  const viewportSettings = isMobile
+    ? { once: true, margin: '0px', amount: 0.03 }
+    : { once: false, margin: '-150px', amount: 0.08 }
+
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: '-60px', amount: 0.15 }}
+      viewport={viewportSettings}
       variants={{
         visible: {
           transition: {
-            staggerChildren: staggerDelay,
+            staggerChildren: isMobile ? 0.08 : staggerDelay,
           },
         },
       }}
@@ -93,13 +129,15 @@ export function StaggerContainer({ children, staggerDelay = 0.1 }: { children: R
 }
 
 export function StaggerItem({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile()
+
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0.3, y: 20 },
+        hidden: { opacity: 0, y: isMobile ? 10 : 15 },
         visible: { opacity: 1, y: 0 },
       }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: isMobile ? 0.3 : 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

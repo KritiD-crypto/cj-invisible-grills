@@ -1,19 +1,52 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { Breadcrumbs, QuoteBanner, ValuePoint } from '@/components/site/sections'
+import { Breadcrumbs, QuoteBanner } from '@/components/site/sections'
 import { buildMetadata } from '@/lib/seo'
+import { AboutHero } from '@/components/site/about-hero'
+import { AboutApproach } from '@/components/site/about-approach'
+import { AboutValues } from '@/components/site/about-values'
+import { AboutProcess } from '@/components/site/about-process'
 
 export const metadata = buildMetadata('About', 'Learn how CJ Invisible Grills approaches invisible grills, safety nets and customer-focused installation conversations across Bengaluru and Mysuru.', '/about')
 
 export default function AboutPage() {
-  return <main>
-    <section className="about-lead"><Breadcrumbs items={[{ title: 'About' }]} /><span className="eyebrow">A little about us</span><h1>Thoughtful solutions for more open, everyday living.</h1><p>CJ Invisible Grills helps households in Bengaluru and Mysuru explore grill, netting and related solutions for the spaces they use every day.</p></section>
-    <div className="page-content">
-      <section className="about-statement"><p>We believe a good installation begins with listening: understanding the opening, the people who use it, and what matters to the home.</p></section>
-      <section className="editorial-split"><figure className="editorial-image"><div><Image src="/images/hero-balcony.png" alt="Illustrative modern apartment balcony with subtle safety cable detailing" fill sizes="(max-width: 760px) 90vw, 50vw" /></div><figcaption>Illustrative architectural concept · Not a verified customer project</figcaption></figure><div className="editorial-copy"><span className="eyebrow">Our approach</span><h2>Good recommendations are grounded in the real space.</h2><p>What works for one balcony may not suit another. We pay attention to the shape of the opening, the available fixing surfaces, the routines of the household and practical access for future care.</p><p>Our role is to explain possible approaches, clarify what needs a site discussion and keep the next steps understandable.</p><Link className="text-link" href="/services">Explore our services <ArrowRight size={15} /></Link></div></section>
-      <section className="section section-tight"><span className="eyebrow">What guides our work</span><h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(34px, 4vw, 48px)', fontWeight: 400, letterSpacing: '-.05em', lineHeight: 1.1, margin: '13px 0 0' }}>The little things are part of the solution.</h2><div className="value-grid"><ValuePoint title="Listen first" copy="We ask about the property and the reason behind your enquiry before talking through an option." /><ValuePoint title="Explain plainly" copy="Clear scope and practical considerations help you make an informed decision." /><ValuePoint title="Respect the setting" copy="We consider the home, the existing architecture and the people who use the space." /><ValuePoint title="Stay thoughtful" copy="Care, access and maintenance belong in the conversation, not only the installation." /></div></section>
-      <section className="section section-tight"><div className="section-intro"><div><span className="eyebrow">A clear journey</span><h2>From first question to finished detail.</h2></div><div><p>A considered process helps keep the conversation and the work aligned.</p></div></div><div className="approach-list"><article className="approach-item"><h3>Understand the space</h3><p>We gather the essentials about location, opening, property and intended use.</p></article><article className="approach-item"><h3>Discuss what fits</h3><p>We talk through options, scope, access and what needs an on-site assessment.</p></article><article className="approach-item"><h3>Coordinate and review</h3><p>Once agreed, the work is coordinated and reviewed with care at the end.</p></article></div></section>
-    </div><QuoteBanner title="Tell us what you’re working with." copy="A quick conversation can help us understand the opening and the next useful step." />
-  </main>
+  const values = [
+    {
+      title: 'Listen first',
+      copy: 'We ask about the property and the reason behind your enquiry before talking through an option.'
+    },
+    {
+      title: 'Explain plainly',
+      copy: 'Clear scope and practical considerations help you make an informed decision.'
+    },
+    {
+      title: 'Respect the setting',
+      copy: 'We consider the home, the existing architecture and the people who use the space.'
+    },
+    {
+      title: 'Stay thoughtful',
+      copy: 'Care, access and maintenance belong in the conversation, not only the installation.'
+    }
+  ]
+
+  return (
+    <main className="about-page-premium">
+      <section className="about-lead-premium">
+        <Breadcrumbs items={[{ title: 'About' }]} />
+        <AboutHero />
+      </section>
+
+      <div className="about-content-premium">
+        <section className="about-statement-premium">
+          <p>We believe a good installation begins with listening: understanding the opening, the people who use it, and what matters to the home.</p>
+        </section>
+
+        <AboutApproach />
+
+        <AboutValues values={values} />
+
+        <AboutProcess />
+      </div>
+
+      <QuoteBanner title="Tell us what you're working with." copy="A quick conversation can help us understand the opening and the next useful step." />
+    </main>
+  )
 }
