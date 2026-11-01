@@ -85,13 +85,13 @@ const galleryItems: GalleryItem[] = [
 const filters = [
   'All',
   'Invisible grills',
+  'Cloth hangers',
   'Safety nets',
   'Transparent copolymer',
   'Garware TUF ropes',
   'Staircase safety nets',
   'Mosquito nets',
   'Sports nets',
-  'Cloth hangers',
 ]
 
 export function GalleryGrid() {

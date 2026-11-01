@@ -7,14 +7,24 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 const FAST_EASE = [0.16, 1, 0.3, 1] as const
 
 const serviceOptions = [
-  'Invisible Grills',
-  'Safety Nets',
-  'Balcony Nets',
-  'Bird Nets',
-  'Pigeon Nets',
-  'Sports Nets',
-  'Cloth Hangers',
-  'Bird Spikes',
+  'Invisible Grills for Balcony',
+  'Invisible Grills for Glass Balcony',
+  'Invisible Grills for Plain Balcony',
+  'Invisible Grills for Windows',
+  'Invisible Grills for Utilities',
+  'Invisible Grills for Staircases',
+  'Invisible Grills for Terraces',
+  'Invisible Grills for Compound Walls',
+  'Invisible Grills for Open Areas',
+  'Wall-Mounted Cloth Hangers',
+  'Ceiling-Mounted Cloth Hangers',
+  'Extra-Mount Cloth Hangers',
+  'Pigeon Safety Nets',
+  'Cricket Practice Nets',
+  'Child Safety Nets',
+  'Pet Safety Nets',
+  'Coconut Safety Nets',
+  'Other Safety Net Solutions',
   'Not sure yet',
 ]
 

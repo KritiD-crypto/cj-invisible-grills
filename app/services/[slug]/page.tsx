@@ -10,7 +10,7 @@ import { Reveal } from '@/components/site/reveal'
 import { QuoteBanner } from '@/components/site/sections'
 import { findService, serviceRoutes, services } from '@/lib/business'
 import { getServiceDetailInfo } from '@/lib/service-details'
-import { breadcrumbJsonLd, buildMetadata, jsonLdScript, siteUrl } from '@/lib/seo'
+import { breadcrumbJsonLd, buildMetadata, getServiceMetadata, jsonLdScript, siteUrl } from '@/lib/seo'
 
 export function generateStaticParams() {
   return serviceRoutes.map((slug) => ({ slug }))
@@ -20,11 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const service = findService(slug)
   if (!service) return buildMetadata('Service', 'Explore installation solutions from CJ Invisible Grills.', `/services/${slug}`)
-  return buildMetadata(
-    `${service.pageTitle} in Bengaluru, Chennai & Mysore`,
-    `${service.pageTitle} by CJ Invisible Grills. Premium installation across Bengaluru, Chennai and Mysore with high-tensile 316 stainless steel cables, durable netting, warranty and site-aware craftsmanship.`,
-    `/services/${slug}`
-  )
+  return getServiceMetadata(slug, service.pageTitle)
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {

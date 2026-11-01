@@ -123,8 +123,8 @@ export function SiteHeader() {
         <Image
           src="/images/cj-logo-transparent.png"
           alt="CJ Invisible Grills"
-          width={180}
-          height={60}
+          width={280}
+          height={93}
           priority
           className="brand-logo-img"
         />

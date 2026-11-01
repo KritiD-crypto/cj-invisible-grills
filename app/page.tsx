@@ -18,6 +18,16 @@ export const metadata = buildMetadata(
 )
 
 export default function HomePage() {
+  const homepageServiceSlugs = [
+    'invisible-grills-for-balcony',
+    'invisible-grills-for-glass-balcony',
+    'invisible-grills-for-windows',
+    'invisible-grills-for-utilities',
+  ]
+  const homepageServices = homepageServiceSlugs
+    .map((slug) => services.find((s) => s.slug === slug))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s))
+
   return <main>
     <CinematicHeroV2 />
 
@@ -28,10 +38,11 @@ export default function HomePage() {
         <SectionIntro eyebrow="Explore the possibilities" title="A considered fit for every opening." copy="From a balcony edge to a utility space, start with the need and we'll help you explore an option that makes sense." href="/services" action="See all services" />
       </SlideIn>
       <StaggerContainer>
-        <div className="service-grid service-grid-all">{services.map((service, index) => <StaggerItem key={service.slug}><PremiumServiceCard service={service} index={index} /></StaggerItem>)}</div>
-        <div className="service-grid service-grid-mobile-only">
-          {services.filter(s => ['invisible-grills', 'safety-nets', 'balcony-nets', 'bird-nets'].includes(s.slug)).map((service, index) => (
-            <StaggerItem key={service.slug}><PremiumServiceCard service={service} index={index} /></StaggerItem>
+        <div className="service-grid">
+          {homepageServices.map((service, index) => (
+            <StaggerItem key={service.slug}>
+              <PremiumServiceCard service={service} index={index} />
+            </StaggerItem>
           ))}
         </div>
       </StaggerContainer>
@@ -56,7 +67,11 @@ export default function HomePage() {
         <SectionIntro eyebrow="A closer look" title="Material, light and open space." copy="Explore genuine completed installations across invisible grills, safety nets and clothes hangers." href="/gallery" action="Explore the gallery" />
       </SlideIn>
       <SlideIn delay={0.2}>
-        <div className="home-gallery-preview"><Link href="/gallery"><Image src="/services/invisible-grills/invisible-grills-02.jpg" alt="Discreet invisible grill cable installation" fill sizes="(max-width: 760px) 60vw, 38vw" /><span>Invisible grills <small>Installation</small></span></Link><Link href="/gallery"><Image src="/services/hdpe-nylon/hdpe-nylon-01.jpg" alt="Balcony safety net installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Safety nets <small>Installation</small></span></Link><Link href="/gallery"><Image src="/services/cloth-hangers/cloth-hangers-01.jpg" alt="Ceiling cloth hanger installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Cloth hangers <small>Installation</small></span></Link></div>
+        <div className="home-gallery-preview">
+          <Link href="/gallery"><Image src="/services/invisible-grills/invisible-grills-02.jpg" alt="Discreet invisible grill cable installation" fill sizes="(max-width: 760px) 60vw, 38vw" /><span>Invisible grills <small>Installation</small></span></Link>
+          <Link href="/gallery"><Image src="/services/cloth-hangers/cloth-hangers-01.jpg" alt="Ceiling cloth hanger installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Cloth hangers <small>Installation</small></span></Link>
+          <Link href="/gallery"><Image src="/services/hdpe-nylon/hdpe-nylon-01.jpg" alt="Balcony safety net installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Safety nets <small>Installation</small></span></Link>
+        </div>
       </SlideIn>
     </AnimatedSection>
 

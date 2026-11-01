@@ -7,7 +7,7 @@ import { services } from '@/lib/business'
 
 const suggestions = ['What services do you offer?', 'Do you serve my area?', 'How do I get an estimate?']
 const responses: Record<string, string> = {
-  'What services do you offer?': 'We offer invisible grills, safety nets, balcony nets, bird and pigeon nets, sports nets, cloth hangers and bird spikes. Tell us what space you have in mind and we can point you to a relevant service.',
+  'What services do you offer?': 'We offer invisible grills (for balconies, glass balconies, windows, utilities, staircases, terraces, compound walls and open areas), wall-mounted and ceiling cloth hangers, and high-durability safety net solutions (pigeon nets, cricket practice nets, child and pet safety nets, coconut nets and balcony nets). Tell us what space you have in mind and we can point you to a relevant service.',
   'Do you serve my area?': 'We coordinate enquiries across Chennai, Bengaluru and Mysore. Use the service-area link below to search localities, or message us with your area to confirm coverage and scheduling.',
   'How do I get an estimate?': 'An estimate depends on the opening, site conditions and the solution you choose. Share a few details and photos over WhatsApp, or use the contact form to prepare your enquiry.',
   'I need a quote': 'For a case-specific quote, tell us your city, locality, service and property type. Our WhatsApp handoff will open a message to +91 9886577746 so you can share the details directly.',
