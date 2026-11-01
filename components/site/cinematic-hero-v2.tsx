@@ -6,19 +6,22 @@ import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 
-// Hook to detect mobile viewport
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 760)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    const mql = window.matchMedia('(max-width: 760px)')
+    setIsMobile(mql.matches)
+
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
   }, [])
 
   return isMobile
 }
+
+const FAST_EASE = [0.16, 1, 0.3, 1] as const
 
 export function CinematicHeroV2() {
   const [showContent, setShowContent] = useState(false)
@@ -31,59 +34,31 @@ export function CinematicHeroV2() {
       return
     }
 
-    // Mobile: Quick content reveal for immediate engagement
-    // Desktop: Smooth delayed entrance
-    const timer = setTimeout(() => setShowContent(true), isMobile ? 400 : 1000)
-
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [prefersReducedMotion, isMobile])
+    // Near-instant reveal: content is ready without long blank waiting period
+    const timer = setTimeout(() => setShowContent(true), 60)
+    return () => clearTimeout(timer)
+  }, [prefersReducedMotion])
 
   if (prefersReducedMotion) {
     return <StaticHero />
   }
 
-  // Mobile: Premium architectural reveal with elegant zoom and fade
-  // Desktop: Smooth cinematic zoom
-  const mobileAnimation = {
-    scale: 1.22,
-    duration: 2.4,
-    ease: [0.25, 0.1, 0.25, 1] as any,
-    imageOpacity: { initial: 0, animate: 1, duration: 1.0 },
-    overlayOpacity: { initial: 0.5, animate: 0.32 }
-  }
-
-  const desktopAnimation = {
-    scale: 1.18,
-    duration: 2.0,
-    ease: [0.33, 0.1, 0.2, 1] as any
-  }
-
-  const animation = isMobile ? mobileAnimation : desktopAnimation
-
   return (
     <section className="cinematic-hero-v2">
-      {/* Balcony grill image with premium cinematic reveal */}
+      {/* Balcony grill image with smooth GPU-accelerated reveal */}
       <div className="hero-camera-scene">
         <motion.div
           className="camera-layer"
-          initial={{ scale: 1, opacity: isMobile ? 0 : 1 }}
-          animate={{
-            scale: animation.scale,
-            opacity: 1
-          }}
-          transition={{
-            scale: { duration: animation.duration, ease: animation.ease },
-            opacity: isMobile ? { duration: mobileAnimation.imageOpacity.duration, ease: [0.33, 0, 0.2, 1] } : {}
-          }}
+          initial={{ scale: 1.04, opacity: 0.85 }}
+          animate={{ scale: 1.12, opacity: 1 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
             src={isMobile ? "/images/grill-detail.png" : "/images/hero-balcony.png"}
             alt="Apartment balcony with invisible safety grills"
             fill
             priority
-            quality={95}
+            quality={90}
             className="layer-image"
             style={{
               objectFit: 'cover',
@@ -93,111 +68,86 @@ export function CinematicHeroV2() {
           />
         </motion.div>
 
-        {/* Dynamic atmosphere overlay with refined fade */}
+        {/* Dynamic atmosphere overlay with smooth light fade */}
         <motion.div
           className="hero-atmosphere-gradient"
-          initial={{ opacity: isMobile ? mobileAnimation.overlayOpacity.initial : 0.35 }}
-          animate={{ opacity: showContent ? (isMobile ? mobileAnimation.overlayOpacity.animate : 0.28) : (isMobile ? mobileAnimation.overlayOpacity.initial : 0.35) }}
-          transition={{ duration: isMobile ? 1.2 : 1, ease: [0.33, 0, 0.2, 1] }}
+          initial={{ opacity: 0.35 }}
+          animate={{ opacity: showContent ? 0.28 : 0.35 }}
+          transition={{ duration: 0.6 }}
         />
       </div>
 
-      {/* Content overlay with elegant staggered entrance */}
+      {/* Content overlay with immediate responsive entrance */}
       <div className="hero-content-overlay">
         <motion.div
           className="hero-copy-v2"
-          initial={{ opacity: 0, y: isMobile ? 20 : 30 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{
             opacity: showContent ? 1 : 0,
-            y: showContent ? 0 : (isMobile ? 20 : 30),
+            y: showContent ? 0 : 15,
           }}
-          transition={{ duration: isMobile ? 0.65 : 0.7, ease: [0.33, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.38, ease: FAST_EASE }}
         >
-          {/* Eyebrow with refined entrance */}
+          {/* Eyebrow */}
           <motion.span
             className="eyebrow-v2"
-            initial={{ opacity: 0, y: isMobile ? 8 : 0 }}
-            animate={{
-              opacity: showContent ? 1 : 0,
-              y: showContent ? 0 : (isMobile ? 8 : 0)
-            }}
-            transition={{ duration: 0.5, delay: showContent ? (isMobile ? 0.05 : 0.1) : 0, ease: [0.33, 0, 0.2, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: showContent ? 1 : 0 }}
+            transition={{ duration: 0.3, delay: 0.04 }}
           >
             Made for the way you live
           </motion.span>
 
-          {/* Headline with word-by-word stagger on mobile */}
+          {/* Headline */}
           <motion.h1
             className="hero-headline-v2"
-            initial={{ opacity: 0, y: isMobile ? 12 : 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{
               opacity: showContent ? 1 : 0,
-              y: showContent ? 0 : (isMobile ? 12 : 15),
+              y: showContent ? 0 : 10,
             }}
-            transition={{ duration: isMobile ? 0.7 : 0.6, delay: showContent ? (isMobile ? 0.12 : 0.15) : 0, ease: [0.22, 0.03, 0.26, 1] }}
+            transition={{ duration: 0.4, delay: 0.08, ease: FAST_EASE }}
           >
-            <motion.span
-              style={{ display: 'inline-block' }}
-              initial={{ opacity: 0, y: isMobile ? 6 : 0 }}
-              animate={{ opacity: showContent ? 1 : 0, y: 0 }}
-              transition={{ duration: 0.4, delay: showContent ? (isMobile ? 0.18 : 0.15) : 0 }}
-            >
-              Safety that lets the{' '}
-            </motion.span>
-            <motion.em
-              className="highlight-word"
-              style={{ display: 'inline-block' }}
-              initial={{ opacity: 0, y: isMobile ? 6 : 0 }}
-              animate={{ opacity: showContent ? 1 : 0, y: 0 }}
-              transition={{ duration: 0.4, delay: showContent ? (isMobile ? 0.28 : 0.15) : 0 }}
-            >
-              view
-            </motion.em>
-            <motion.span
-              style={{ display: 'inline-block' }}
-              initial={{ opacity: 0, y: isMobile ? 6 : 0 }}
-              animate={{ opacity: showContent ? 1 : 0, y: 0 }}
-              transition={{ duration: 0.4, delay: showContent ? (isMobile ? 0.35 : 0.15) : 0 }}
-            >
-              {' '}breathe.
-            </motion.span>
+            <span>Safety that lets the </span>
+            <em className="highlight-word">view</em>
+            <span> breathe.</span>
           </motion.h1>
 
-          {/* Subtitle with refined timing */}
+          {/* Subtitle */}
           <motion.p
             className="hero-subtitle-v2"
-            initial={{ opacity: 0, y: isMobile ? 8 : 0 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{
               opacity: showContent ? 1 : 0,
-              y: showContent ? 0 : (isMobile ? 8 : 0)
+              y: showContent ? 0 : 8
             }}
-            transition={{ duration: 0.5, delay: showContent ? (isMobile ? 0.45 : 0.25) : 0, ease: [0.33, 0, 0.2, 1] }}
+            transition={{ duration: 0.35, delay: 0.12, ease: FAST_EASE }}
           >
             Premium Invisible Grills &amp; Safety Solutions
           </motion.p>
 
-          {/* Description with smooth fade */}
+          {/* Description */}
           <motion.p
             className="hero-description-v2"
-            initial={{ opacity: 0, y: isMobile ? 6 : 0 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{
               opacity: showContent ? 1 : 0,
-              y: showContent ? 0 : (isMobile ? 6 : 0)
+              y: showContent ? 0 : 6
             }}
-            transition={{ duration: 0.5, delay: showContent ? (isMobile ? 0.55 : 0.3) : 0, ease: [0.33, 0, 0.2, 1] }}
+            transition={{ duration: 0.35, delay: 0.16, ease: FAST_EASE }}
           >
             Thoughtfully considered grills, nets and everyday solutions for open spaces in Bengaluru and Mysuru.
           </motion.p>
 
-          {/* Action buttons with subtle lift */}
+          {/* Action buttons */}
           <motion.div
             className="hero-actions-v2"
-            initial={{ opacity: 0, y: isMobile ? 10 : 15 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{
               opacity: showContent ? 1 : 0,
-              y: showContent ? 0 : (isMobile ? 10 : 15),
+              y: showContent ? 0 : 8,
             }}
-            transition={{ duration: 0.6, delay: showContent ? (isMobile ? 0.65 : 0.4) : 0, ease: [0.22, 0.03, 0.26, 1] }}
+            transition={{ duration: 0.35, delay: 0.2, ease: FAST_EASE }}
           >
             <Link className="button button-primary" href="/contact">
               Get a Free Quote <ArrowUpRight size={16} />
@@ -207,18 +157,17 @@ export function CinematicHeroV2() {
             </Link>
           </motion.div>
 
-          {/* Note with final reveal */}
+          {/* Note */}
           <motion.div
             className="hero-note-v2"
             initial={{ opacity: 0 }}
             animate={{ opacity: showContent ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: showContent ? (isMobile ? 0.75 : 0.5) : 0, ease: [0.33, 0, 0.2, 1] }}
+            transition={{ duration: 0.3, delay: 0.24 }}
           >
             <span className="note-line" />
             A clear conversation. A solution shaped around your space.
           </motion.div>
         </motion.div>
-
       </div>
     </section>
   )

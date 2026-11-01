@@ -32,10 +32,10 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: '80px 0px 0px 0px' }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.035, 0.14), ease: [0.16, 1, 0.3, 1] }}
     >
       <Link
         href={`/services/${service.slug}`}
@@ -47,9 +47,9 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
         <motion.div
           className="service-image"
           animate={{
-            scale: isHovered ? 1.05 : 1,
+            scale: isHovered ? 1.04 : 1,
           }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
         >
           <Image src={service.image} alt={`Illustrative image for ${service.title.toLowerCase()} solutions`} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" />
           <span className="image-note">Illustrative image</span>
@@ -57,7 +57,7 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
             className="card-glow"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
           />
         </motion.div>
         <div className="service-card-copy">
@@ -71,7 +71,7 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
               x: isHovered ? 3 : 0,
               y: isHovered ? -3 : 0,
             }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
           >
             <ArrowUpRight size={17} />
           </motion.span>

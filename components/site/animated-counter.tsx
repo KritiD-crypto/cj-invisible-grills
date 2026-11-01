@@ -47,7 +47,7 @@ export function StatisticsSection() {
       setProgress(0)
       const startedAt = performance.now()
       const tick = (now: number) => {
-        const linearProgress = Math.min((now - startedAt) / 1600, 1)
+        const linearProgress = Math.min((now - startedAt) / 750, 1)
         setProgress(1 - (1 - linearProgress) ** 3)
         if (linearProgress < 1) frameRef.current = window.requestAnimationFrame(tick)
         else frameRef.current = null
@@ -67,7 +67,7 @@ export function StatisticsSection() {
             cancelAnimation()
             setProgress(0)
           }
-        }, { threshold: 0.15 })
+        }, { threshold: 0.05, rootMargin: '60px 0px 0px 0px' })
       : null
 
     if (observer) {

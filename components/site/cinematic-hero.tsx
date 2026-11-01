@@ -16,9 +16,9 @@ export function CinematicHero() {
       return
     }
 
-    const timer1 = setTimeout(() => setPhase('building'), 1200)
-    const timer2 = setTimeout(() => setPhase('balcony'), 2800)
-    const timer3 = setTimeout(() => setPhase('content'), 4600)
+    const timer1 = setTimeout(() => setPhase('building'), 400)
+    const timer2 = setTimeout(() => setPhase('balcony'), 900)
+    const timer3 = setTimeout(() => setPhase('content'), 1500)
 
     return () => {
       clearTimeout(timer1)
