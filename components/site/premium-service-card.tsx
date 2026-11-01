@@ -7,19 +7,31 @@ import { ArrowUpRight } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import type { services } from '@/lib/business'
 
-export function PremiumServiceCard({ service, index = 0 }: { service: typeof services[number]; index?: number }) {
+export function PremiumServiceCard({
+  service,
+  index = 0,
+  label,
+}: {
+  service: typeof services[number]
+  index?: number
+  label?: string
+}) {
   const [isHovered, setIsHovered] = useState(false)
   const prefersReducedMotion = useReducedMotion()
+
+  const displayLabel = label ?? `0${index + 1}`
+
+  const imageAlt = `${service.title} - CJ Invisible Grills`
 
   if (prefersReducedMotion) {
     return (
       <Link href={`/services/${service.slug}`} className="service-card" style={{ ['--card-order' as string]: index }}>
         <div className="service-image">
-          <Image src={service.image} alt={`Illustrative image for ${service.title.toLowerCase()} solutions`} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" />
-          <span className="image-note">Illustrative image</span>
+          <Image src={service.image} alt={imageAlt} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" />
+
         </div>
         <div className="service-card-copy">
-          <span className="service-number">0{index + 1}</span>
+          <span className="service-number">{displayLabel}</span>
           <h3>{service.title}</h3>
           <p>{service.description}</p>
           <span className="card-arrow" aria-hidden="true">
@@ -51,8 +63,8 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
           }}
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Image src={service.image} alt={`Illustrative image for ${service.title.toLowerCase()} solutions`} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" />
-          <span className="image-note">Illustrative image</span>
+          <Image src={service.image} alt={imageAlt} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" />
+
           <motion.div
             className="card-glow"
             initial={{ opacity: 0 }}
@@ -61,7 +73,7 @@ export function PremiumServiceCard({ service, index = 0 }: { service: typeof ser
           />
         </motion.div>
         <div className="service-card-copy">
-          <span className="service-number">0{index + 1}</span>
+          <span className="service-number">{displayLabel}</span>
           <h3>{service.title}</h3>
           <p>{service.description}</p>
           <motion.span

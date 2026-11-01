@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
@@ -7,7 +8,7 @@ import { ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react'
 import { services } from '@/lib/business'
 
 const whatsappMessage = 'Hello CJ Invisible Grills, I would like to enquire about your services.'
-const whatsappHref = `https://wa.me/919035771799?text=${encodeURIComponent(whatsappMessage)}`
+const whatsappHref = `https://wa.me/919886577746?text=${encodeURIComponent(whatsappMessage)}`
 
 const serviceLinks = services.map((service) => ({ label: service.title, href: `/services/${service.slug}` }))
 const moreLinks = [
@@ -119,8 +120,14 @@ export function SiteHeader() {
   return <header className={`site-header${menuOpen ? ' is-menu-open' : ''}`}>
     <div className="nav-shell">
       <Link href="/" className="brand" aria-label="CJ Invisible Grills home" onClick={() => setMenuOpen(false)}>
-        <span className="brand-mark" aria-hidden="true"><span /><span /><span /></span>
-        <span className="brand-copy"><strong>CJ</strong><span>INVISIBLE GRILLS</span></span>
+        <Image
+          src="/images/cj-logo-transparent.png"
+          alt="CJ Invisible Grills"
+          width={180}
+          height={60}
+          priority
+          className="brand-logo-img"
+        />
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         <Link href="/" className={`nav-link${routeIsActive('/') ? ' is-active' : ''}`} aria-current={routeIsActive('/') ? 'page' : undefined}>Home</Link>
@@ -131,7 +138,7 @@ export function SiteHeader() {
         <DesktopDropdown id="more-dropdown" label="More" items={moreLinks} active={routeIsActive('/blog') || routeIsActive('/faq')} />
       </nav>
       <div className="nav-actions">
-        <a className="nav-action nav-call" href="tel:+919035771799" aria-label="Call CJ Invisible Grills at +91 90357 71799"><Phone size={15} aria-hidden="true" /><span>Call Now</span></a>
+        <a className="nav-action nav-call" href="tel:+919886577746" aria-label="Call CJ Invisible Grills at +91 9886577746"><Phone size={15} aria-hidden="true" /><span>Call Now</span></a>
         <a className="nav-action nav-whatsapp" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Message CJ Invisible Grills on WhatsApp"><WhatsAppIcon /><span>WhatsApp</span></a>
         <Link className="nav-cta" href="/contact">Get a Free Quote <ArrowUpRight aria-hidden="true" size={15} /></Link>
       </div>
@@ -144,7 +151,17 @@ export function SiteHeader() {
       <Link href="/about" aria-current={routeIsActive('/about') ? 'page' : undefined} onClick={() => setMenuOpen(false)}>About</Link>
       <details className="mobile-nav-group">
         <summary>Services</summary>
-        <div className="mobile-subnav"><Link href="/services" onClick={() => setMenuOpen(false)}>View All Services</Link>{serviceLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</Link>)}</div>
+        <div className="mobile-subnav">
+          <Link href="/services" className="mobile-subnav-all" onClick={() => setMenuOpen(false)}>
+            <span>View All Services</span>
+            <ArrowUpRight size={14} />
+          </Link>
+          {serviceLinks.map((item) => (
+            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
       </details>
       <Link href="/areas" aria-current={routeIsActive('/areas') ? 'page' : undefined} onClick={() => setMenuOpen(false)}>Areas</Link>
       <Link href="/gallery" aria-current={routeIsActive('/gallery') ? 'page' : undefined} onClick={() => setMenuOpen(false)}>Gallery</Link>
@@ -153,9 +170,8 @@ export function SiteHeader() {
         <div className="mobile-subnav">{moreLinks.map((item) => <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</Link>)}</div>
       </details>
       <div className="mobile-menu-actions">
-        <Link className="mobile-contact mobile-contact-page" href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
-        <a className="mobile-contact mobile-call" href="tel:+919035771799" onClick={() => setMenuOpen(false)}><Phone size={15} aria-hidden="true" />Call Now · +91 90357 71799</a>
-        <a className="mobile-contact mobile-whatsapp" href={whatsappHref} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} aria-label="Message CJ Invisible Grills on WhatsApp"><WhatsAppIcon />WhatsApp · Message us</a>
+        <a className="mobile-contact mobile-call" href="tel:+919886577746" onClick={() => setMenuOpen(false)}><Phone size={15} aria-hidden="true" />Call Now &middot; +91 9886577746</a>
+        <a className="mobile-contact mobile-whatsapp" href={whatsappHref} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} aria-label="Message CJ Invisible Grills on WhatsApp"><WhatsAppIcon />WhatsApp &middot; Message us</a>
       </div>
       <Link className="mobile-quote" href="/contact" onClick={() => setMenuOpen(false)}>Get a Free Quote <ArrowUpRight size={16} /></Link>
     </nav>

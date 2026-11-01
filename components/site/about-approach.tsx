@@ -25,7 +25,7 @@ export function AboutApproach() {
               sizes="(max-width: 760px) 90vw, 50vw"
             />
           </div>
-          <figcaption>Illustrative architectural concept · Not a verified customer project</figcaption>
+
         </div>
         <div className="about-approach-content">
           <span className="eyebrow">Our approach</span>
@@ -71,9 +71,7 @@ export function AboutApproach() {
           <div className="approach-frame-specular" />
           <div className="approach-frame-border" />
         </motion.div>
-        <figcaption className="approach-figcaption">
-          Illustrative architectural concept · Not a verified customer project
-        </figcaption>
+
       </motion.div>
 
       {/* Editorial Content with Instant Staggered Viewport Entrance */}

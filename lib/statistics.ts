@@ -8,7 +8,7 @@ export type BusinessStatistic = {
 // Replace each value with an accurate, approved figure before production launch.
 export const businessStatistics: BusinessStatistic[] = [
   { label: 'Projects Completed', value: 5000, suffix: '+' },
-  { label: 'Happy Customers', value: 4800, suffix: '+' },
-  { label: 'Years of Experience', value: 12, suffix: '+' },
-  { label: 'Service Locations', value: 90, suffix: '+' },
+  { label: 'Happy Customers', value: 4700, suffix: '+' },
+  { label: 'Years of Experience', value: 15, suffix: '+' },
+  { label: 'Localities', value: 95, suffix: '+' },
 ]

@@ -1,9 +1,35 @@
-import { Breadcrumbs, QuoteBanner } from '@/components/site/sections'
+import { PageHeader } from '@/components/site/page-header'
+import { QuoteBanner } from '@/components/site/sections'
 import { GalleryGrid } from '@/components/site/gallery-grid'
+import { Reveal } from '@/components/site/reveal'
 import { buildMetadata } from '@/lib/seo'
 
-export const metadata = buildMetadata('Gallery of invisible grill and safety net concepts', 'Browse illustrative architectural concepts for invisible grills, balcony safety nets, cloth hangers and sports netting.', '/gallery')
+export const metadata = buildMetadata(
+  'Invisible Grills & Safety Nets Gallery | Installation Photos in Bengaluru, Chennai & Mysore',
+  'Browse genuine company installations and solutions across invisible grills, balcony safety nets, transparent copolymer netting, cricket sports nets and cloth hangers in Bengaluru, Chennai and Mysore.',
+  '/gallery'
+)
 
 export default function GalleryPage() {
-  return <main><section className="page-top"><Breadcrumbs items={[{ title: 'Gallery' }]} /><div className="page-heading"><span className="eyebrow">A visual starting point</span><h1>Spaces, considered from a different angle.</h1><p>These AI-assisted images are illustrative concepts, not verified completed customer installations. Replace them with real company photography when available.</p></div></section><div className="page-content"><GalleryGrid /></div><QuoteBanner title="Have a space in mind?" copy="Share a few details and we’ll help you explore a solution that fits the opening." /></main>
+  return (
+    <main className="page-ambient-bg">
+      <PageHeader
+        breadcrumbs={[{ title: 'Gallery' }]}
+        eyebrow="A visual starting point"
+        title="Spaces, considered from a different angle."
+        description="Browse our completed business installations and solutions across invisible grills, safety nets, mosquito protection, sports netting, and clothes hangers."
+      />
+
+      <div className="page-content">
+        <GalleryGrid />
+      </div>
+
+      <Reveal>
+        <QuoteBanner
+          title="Have a space in mind?"
+          copy="Share a few details and we’ll help you explore a solution that fits the opening."
+        />
+      </Reveal>
+    </main>
+  )
 }

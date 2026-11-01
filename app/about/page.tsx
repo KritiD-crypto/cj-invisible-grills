@@ -6,8 +6,8 @@ import { AboutValues } from '@/components/site/about-values'
 import { AboutProcess } from '@/components/site/about-process'
 
 export const metadata = buildMetadata(
-  'About',
-  'Learn how CJ Invisible Grills approaches invisible grills, safety nets and customer-focused installation conversations across Bengaluru and Mysuru.',
+  'About CJ Invisible Grills | Balcony Safety Solutions in Bengaluru, Chennai & Mysore',
+  'Learn about CJ Invisible Grills: premium 316 stainless steel invisible grills, certified safety nets, customer-first craftsmanship, and transparent service across Bengaluru, Chennai and Mysore.',
   '/about'
 )
 

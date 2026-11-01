@@ -8,9 +8,9 @@ import { services } from '@/lib/business'
 const suggestions = ['What services do you offer?', 'Do you serve my area?', 'How do I get an estimate?']
 const responses: Record<string, string> = {
   'What services do you offer?': 'We offer invisible grills, safety nets, balcony nets, bird and pigeon nets, sports nets, cloth hangers and bird spikes. Tell us what space you have in mind and we can point you to a relevant service.',
-  'Do you serve my area?': 'We coordinate enquiries across Bengaluru and Mysuru. Use the service-area link below to search localities, or message us with your area to confirm coverage and scheduling.',
+  'Do you serve my area?': 'We coordinate enquiries across Chennai, Bengaluru and Mysore. Use the service-area link below to search localities, or message us with your area to confirm coverage and scheduling.',
   'How do I get an estimate?': 'An estimate depends on the opening, site conditions and the solution you choose. Share a few details and photos over WhatsApp, or use the contact form to prepare your enquiry.',
-  'I need a quote': 'For a case-specific quote, tell us your city, locality, service and property type. Our WhatsApp handoff will open a message to +91 90357 71799 so you can share the details directly.',
+  'I need a quote': 'For a case-specific quote, tell us your city, locality, service and property type. Our WhatsApp handoff will open a message to +91 9886577746 so you can share the details directly.',
 }
 
 type Message = { from: 'bot' | 'you'; text: string }
@@ -126,7 +126,7 @@ export function ChatAssistant() {
   }, [])
 
   function respond(question: string) {
-    const answer = responses[question] ?? (services.some((service) => service.title === question) ? `For ${question.toLowerCase()}, the right approach depends on your opening, site surfaces and intended use. Tell us your locality and property type and we can discuss the next step.` : 'For advice specific to your property, contact our team on WhatsApp. We serve enquiries across Bengaluru and Mysuru.')
+    const answer = responses[question] ?? (services.some((service) => service.title === question) ? `For ${question.toLowerCase()}, the right approach depends on your opening, site surfaces and intended use. Tell us your locality and property type and we can discuss the next step.` : 'For advice specific to your property, contact our team on WhatsApp. We serve enquiries across Chennai, Bengaluru and Mysore.')
     setMessages((current) => [...current, { from: 'you', text: question }, { from: 'bot', text: answer }])
     setIsReacting(true)
     if (reactionTimerRef.current !== null) window.clearTimeout(reactionTimerRef.current)
@@ -161,7 +161,7 @@ export function ChatAssistant() {
         <p className="chat-caption chat-section-label">Quick questions</p><div className="chat-suggestions">{suggestions.map((question) => <button key={question} type="button" onClick={() => respond(question)}>{question}</button>)}</div>
         <p className="chat-caption chat-section-label">Choose a service</p><div className="chat-suggestions chat-service-choices">{services.map((service) => <button key={service.slug} type="button" onClick={() => respond(service.title)}>{service.title}</button>)}</div>
         <div className="chat-path-links"><Link href="/areas" onClick={closePanel}>Check service areas</Link><Link href="/contact" onClick={closePanel}>Prepare an enquiry</Link></div>
-        <a className="chat-whatsapp" href="https://wa.me/919035771799?text=Hello%20CJ%20Invisible%20Grills%2C%20I%27d%20like%20to%20discuss%20a%20quote." target="_blank" rel="noopener noreferrer">Continue on WhatsApp <Send size={14} /></a>
+        <a className="chat-whatsapp" href="https://wa.me/919886577746?text=Hello%20CJ%20Invisible%20Grills%2C%20I%27d%20like%20to%20discuss%20a%20quote." target="_blank" rel="noopener noreferrer">Continue on WhatsApp <Send size={14} /></a>
       </section>
 
       {showGreeting && !greetingDismissed && !open && (

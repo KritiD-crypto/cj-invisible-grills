@@ -17,12 +17,22 @@ function useIsMobile() {
   return isMobile
 }
 
-export function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+export function AnimatedSection({
+  children,
+  className = '',
+  delay = 0,
+  id,
+}: {
+  children: React.ReactNode
+  className?: string
+  delay?: number
+  id?: string
+}) {
   const prefersReducedMotion = useReducedMotion()
   const isMobile = useIsMobile()
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>
+    return <div id={id} className={className}>{children}</div>
   }
 
   // Mobile: simpler settings, desktop: original settings
@@ -32,6 +42,7 @@ export function AnimatedSection({ children, className = '', delay = 0 }: { child
 
   return (
     <motion.div
+      id={id}
       className={className}
       initial={{ opacity: 0, y: isMobile ? 10 : 15 }}
       whileInView={{ opacity: 1, y: 0 }}

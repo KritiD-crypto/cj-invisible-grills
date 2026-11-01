@@ -1,15 +1,51 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
-import { Breadcrumbs, QuoteBanner } from '@/components/site/sections'
+import { PageHeader } from '@/components/site/page-header'
+import { QuoteBanner } from '@/components/site/sections'
+import { PremiumServiceCard } from '@/components/site/premium-service-card'
+import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/site/animated-section'
+import { Reveal } from '@/components/site/reveal'
 import { services } from '@/lib/business'
 import { buildMetadata } from '@/lib/seo'
 
-export const metadata = buildMetadata('Invisible grills, safety nets and related services', 'Explore eight service categories from invisible grills and balcony nets to bird spikes and cloth hangers in Bengaluru and Mysuru.', '/services')
+export const metadata = buildMetadata(
+  'Invisible Grills, Balcony Safety Nets, Pigeon Nets in Bengaluru, Chennai & Mysore',
+  'Explore comprehensive safety installations by CJ Invisible Grills: balcony invisible grills, window grills, HDPE pigeon safety nets, transparent copolymer mesh, Garware TUF ropes, cricket sports nets, staircase nets, and cloth hangers across Bengaluru, Chennai and Mysore.',
+  '/services'
+)
 
 export default function ServicesPage() {
-  return <main><section className="page-top"><Breadcrumbs items={[{ title: 'Services' }]} /><div className="page-heading"><span className="eyebrow">A considered set of solutions</span><h1>Services for open spaces, everyday living.</h1><p>Explore the options below. The right fit depends on your opening, surfaces, intended use and building requirements.</p></div></section>
-    <div className="page-content"><div className="service-grid">{services.map((service, index) => <Link href={`/services/${service.slug}`} className="service-card" key={service.slug} style={{ ['--card-order' as string]: index }}><div className="service-image"><Image src={service.image} alt={`Illustrative ${service.title.toLowerCase()} concept image`} fill sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 26vw" /><span className="image-note">Illustrative image</span></div><div className="service-card-copy"><span className="service-number">0{index + 1} / SERVICE</span><h3>{service.title}</h3><p>{service.description}</p><span className="text-link" style={{ marginTop: 12 }}>View service <ArrowUpRight size={14} /></span></div></Link>)}</div></div>
-    <QuoteBanner title="Not sure which service to choose?" copy="Tell us what you want to address and we’ll help you work out a useful next step." />
-  </main>
+  return (
+    <main className="page-ambient-bg">
+      <PageHeader
+        breadcrumbs={[{ title: 'Services' }]}
+        eyebrow="A considered set of solutions"
+        title="Services for open spaces, everyday living."
+        description="Explore the options below. The right fit depends on your opening, surfaces, intended use and building requirements."
+      />
+
+      <div className="page-content">
+        <AnimatedSection className="section-no-pad">
+          <StaggerContainer staggerDelay={0.08}>
+            <div className="service-grid">
+              {services.map((service, index) => (
+                <StaggerItem key={service.slug}>
+                  <PremiumServiceCard
+                    service={service}
+                    index={index}
+                    label={`0${index + 1} / SERVICE`}
+                  />
+                </StaggerItem>
+              ))}
+            </div>
+          </StaggerContainer>
+        </AnimatedSection>
+      </div>
+
+      <Reveal>
+        <QuoteBanner
+          title="Not sure which service to choose?"
+          copy="Tell us what you want to address and we’ll help you work out a useful next step."
+        />
+      </Reveal>
+    </main>
+  )
 }

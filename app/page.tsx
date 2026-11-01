@@ -6,11 +6,16 @@ import { StatisticsSection } from '@/components/site/animated-counter'
 import { Reveal } from '@/components/site/reveal'
 import { CinematicHeroV2 } from '@/components/site/cinematic-hero-v2'
 import { PremiumServiceCard } from '@/components/site/premium-service-card'
+import { FaqAccordionItem } from '@/components/site/faq-accordion'
 import { AnimatedSection, SlideIn, StaggerContainer, StaggerItem } from '@/components/site/animated-section'
 import { articles, faqGroups, services } from '@/lib/business'
 import { buildMetadata } from '@/lib/seo'
 
-export const metadata = buildMetadata('Invisible grills & safety solutions in Bengaluru and Mysuru', 'Premium invisible grills, safety nets and considered home safety solutions in Bengaluru and Mysuru, Karnataka.', '/')
+export const metadata = buildMetadata(
+  'Invisible Grills in Bengaluru, Chennai & Mysuru | Safety Nets & Balcony Grills',
+  'CJ Invisible Grills specializes in premium 316 stainless steel invisible grills, balcony safety nets, pigeon protection, transparent safety nets and sports netting across Bengaluru, Chennai and Mysore. High-tensile strength, open views and trusted warranty.',
+  '/'
+)
 
 export default function HomePage() {
   return <main>
@@ -41,17 +46,17 @@ export default function HomePage() {
           <div className="editorial-copy"><span className="eyebrow">A clearer perspective</span><h2>Protection that doesn't have to take over the view.</h2><p>Every home has its own proportions, routines and priorities. We begin by understanding yours, then talk through what may work for the opening and the people who use it.</p><Link className="text-link" href="/about">Meet CJ Invisible Grills <ArrowRight size={15} /></Link></div>
         </SlideIn>
         <SlideIn direction="right" delay={0.2}>
-          <figure className="editorial-image"><div><Image src="/images/grill-detail.png" alt="Illustrative close view of fine invisible grill cables against a bright balcony opening" fill sizes="(max-width: 760px) 90vw, 50vw" /></div><figcaption>Concept imagery for illustrative purposes · Not a verified customer installation</figcaption></figure>
+          <figure className="editorial-image"><div><Image src="/services/invisible-grills/invisible-grills-01.jpg" alt="CJ Invisible Grills installation across a modern balcony" fill sizes="(max-width: 760px) 90vw, 50vw" /></div><figcaption>CJ Invisible Grills — Balcony cable installation</figcaption></figure>
         </SlideIn>
       </div>
     </AnimatedSection>
 
     <AnimatedSection className="section section-tight bg-ambient-lavender pattern-lines sculptural-bg contour-lines">
       <SlideIn>
-        <SectionIntro eyebrow="A closer look" title="Material, light and open space." copy="Explore illustrative concepts across a few of the solutions we discuss. These are not verified completed projects." href="/gallery" action="Explore the gallery" />
+        <SectionIntro eyebrow="A closer look" title="Material, light and open space." copy="Explore genuine completed installations across invisible grills, safety nets and clothes hangers." href="/gallery" action="Explore the gallery" />
       </SlideIn>
       <SlideIn delay={0.2}>
-        <div className="home-gallery-preview"><Link href="/gallery"><Image src="/images/grill-detail.png" alt="Illustrative fine cable detail in a bright balcony setting" fill sizes="(max-width: 760px) 60vw, 38vw" /><span>Invisible grills <small>Concept imagery</small></span></Link><Link href="/gallery"><Image src="/images/safety-net-study.png" alt="Illustrative balcony safety net across an apartment opening" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Safety nets <small>Concept imagery</small></span></Link><Link href="/gallery"><Image src="/images/cloth-hanger-study.png" alt="Illustrative ceiling-mounted clothes hanger in a modern utility balcony" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Cloth hangers <small>Concept imagery</small></span></Link></div>
+        <div className="home-gallery-preview"><Link href="/gallery"><Image src="/services/invisible-grills/invisible-grills-02.jpg" alt="Discreet invisible grill cable installation" fill sizes="(max-width: 760px) 60vw, 38vw" /><span>Invisible grills <small>Installation</small></span></Link><Link href="/gallery"><Image src="/services/hdpe-nylon/hdpe-nylon-01.jpg" alt="Balcony safety net installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Safety nets <small>Installation</small></span></Link><Link href="/gallery"><Image src="/services/cloth-hangers/cloth-hangers-01.jpg" alt="Ceiling cloth hanger installation" fill sizes="(max-width: 760px) 45vw, 27vw" /><span>Cloth hangers <small>Installation</small></span></Link></div>
       </SlideIn>
     </AnimatedSection>
 
@@ -112,7 +117,16 @@ export default function HomePage() {
         <SectionIntro eyebrow="A few quick answers" title="Before you get in touch." href="/faq" action="Browse all FAQs" />
       </SlideIn>
       <SlideIn delay={0.2}>
-        <div className="faq-group">{faqGroups[0].questions.slice(0, 2).map((item) => <details className="faq-item" key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}</div>
+        <div className="faq-group">
+          {faqGroups[0].questions.slice(0, 2).map((item, index) => (
+            <FaqAccordionItem
+              key={item.q}
+              question={item.q}
+              answer={item.a}
+              defaultOpen={index === 0}
+            />
+          ))}
+        </div>
       </SlideIn>
     </AnimatedSection>
     <QuoteBanner />
