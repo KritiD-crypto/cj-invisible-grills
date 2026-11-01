@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { SiteHeader } from '@/components/site/site-header'
 import { SiteFooter } from '@/components/site/site-footer'
 import { ChatAssistant } from '@/components/site/chat-assistant'
+import { GoogleAnalytics } from '@/components/analytics/google-analytics'
 import { jsonLdScript, organizationJsonLd, websiteJsonLd, siteUrl } from '@/lib/seo'
 import './globals.css'
 
@@ -95,6 +96,7 @@ export default function RootLayout({
   return (
     <html lang="en-IN" data-scroll-behavior="smooth">
       <body>
+        <GoogleAnalytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={jsonLdScript(organizationJsonLd)}
